@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
 
-ROOT_DIR = Path(__file__).resolve().parent
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent  # Go up to project root
 load_dotenv(ROOT_DIR / ".env", override=True)
 
 # Use a fast, cheap model for evaluation

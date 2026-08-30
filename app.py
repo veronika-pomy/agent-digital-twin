@@ -1,9 +1,9 @@
 from openai import OpenAI
-from context import TWIN_SYSTEM_PROMPT
-from tools import tools, handle_tool_calls, log_evaluation
-from styles import CSS, JS, EXAMPLES
-from evaluator import evaluate_message, should_process_normally
-from handlers import route_message
+from src.context.context import TWIN_SYSTEM_PROMPT
+from src.tools.tools import tools, handle_tool_calls, log_evaluation
+from src.ui.styles import CSS, JS, EXAMPLES
+from src.agent.evaluator import evaluate_message, should_process_normally
+from src.agent.handlers import route_message
 from dotenv import load_dotenv
 import os
 from pathlib import Path

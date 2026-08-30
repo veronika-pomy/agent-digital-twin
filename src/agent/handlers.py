@@ -9,9 +9,9 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
-from evaluator import EvaluationResult
+from src.agent.evaluator import EvaluationResult
 
-ROOT_DIR = Path(__file__).resolve().parent
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent  # Go up to project root
 load_dotenv(ROOT_DIR / ".env", override=True)
 
 # Use a fast model for simple responses

@@ -4,7 +4,7 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
-ROOT_DIR = Path(__file__).resolve().parent
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent  # Go up to project root
 load_dotenv(ROOT_DIR / ".env", override=True)
 
 pushover_user = os.getenv("PUSHOVER_USER")

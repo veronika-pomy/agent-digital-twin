@@ -10,7 +10,7 @@ Prerequisites:
 Run with: python test_evaluator.py
 """
 
-from evaluator import evaluate_message, should_process_normally
+from src.agent.evaluator import evaluate_message, should_process_normally
 
 # Test cases covering different message categories
 TEST_CASES = [
