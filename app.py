@@ -1,7 +1,9 @@
 from openai import OpenAI
 from context import TWIN_SYSTEM_PROMPT
-from tools import tools, handle_tool_calls
+from tools import tools, handle_tool_calls, log_evaluation
 from styles import CSS, JS, EXAMPLES
+from evaluator import evaluate_message, should_process_normally
+from handlers import route_message
 from dotenv import load_dotenv
 import os
 from pathlib import Path
@@ -18,6 +20,38 @@ system = [{"role": "system", "content": TWIN_SYSTEM_PROMPT}]
 
 
 def chat(message, history):
+    # Pre-flight evaluation: check if message is career-related BEFORE expensive LLM call
+    evaluation = evaluate_message(message)
+
+    # Console logging for debugging
+    print(f"[EVAL] Category: {evaluation.category}, Confidence: {evaluation.confidence}")
+    print(f"[EVAL] Reasoning: {evaluation.reasoning}")
+
+    # If message needs special handling (greeting, off-topic, inappropriate)
+    if not should_process_normally(evaluation):
+        # Log blocked/special-handled messages to Pushover
+        was_blocked = evaluation.category in ["off_topic", "inappropriate"]
+        log_evaluation(
+            message,
+            evaluation.category,
+            evaluation.confidence,
+            evaluation.reasoning,
+            was_blocked=was_blocked,
+        )
+        response = route_message(message, evaluation)
+        return response
+
+    # Log edge cases (low confidence on career questions)
+    if evaluation.confidence == "low":
+        log_evaluation(
+            message,
+            evaluation.category,
+            evaluation.confidence,
+            evaluation.reasoning,
+            was_blocked=False,
+        )
+
+    # Normal processing for career-related questions
     messages = system + history + [{"role": "user", "content": message}]
     response = openai.chat.completions.create(model=MODEL_NAME, messages=messages, tools=tools)
     while response.choices[0].finish_reason == "tool_calls":

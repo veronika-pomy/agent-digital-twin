@@ -15,11 +15,11 @@ Build a production-ready digital twin agent that gracefully handles career-relat
 - Log all evaluations for monitoring and improvement
 
 **Deliverables:**
-- [ ] Create `evaluator.py` - Evaluation logic with structured outputs
-- [ ] Create `handlers.py` - Separate handlers for on-topic vs off-topic flow
-- [ ] Update `app.py` - Integrate pre-flight evaluation into main chat loop
-- [ ] Extend Pushover logging - Track evaluation metrics (blocked questions, edge cases)
-- [ ] Add evaluation tests - Verify evaluator works on sample inputs
+- [x] Create `evaluator.py` - Evaluation logic with structured outputs
+- [x] Create `handlers.py` - Separate handlers for on-topic vs off-topic flow
+- [x] Update `app.py` - Integrate pre-flight evaluation into main chat loop
+- [x] Extend Pushover logging - Track evaluation metrics (blocked questions, edge cases)
+- [x] Add evaluation tests - Verify evaluator works on sample inputs
 
 **Success Criteria:**
 - Off-topic questions blocked before expensive LLM call

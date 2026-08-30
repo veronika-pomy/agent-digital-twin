@@ -34,6 +34,34 @@ def record_unknown_question(question):
     return "OK"
 
 
+def log_evaluation(user_message, category, confidence, reasoning, was_blocked=False):
+    """
+    Log evaluation metrics to Pushover for monitoring.
+
+    Args:
+        user_message: The user's message
+        category: The classification category
+        confidence: The confidence level
+        reasoning: The reasoning for the classification
+        was_blocked: Whether the message was blocked (not processed normally)
+    """
+    if was_blocked:
+        # Log blocked messages (off-topic, inappropriate)
+        push(
+            f"🚫 BLOCKED: {category}\n"
+            f"Message: {user_message[:100]}\n"
+            f"Confidence: {confidence}\n"
+            f"Reason: {reasoning}"
+        )
+    elif confidence == "low":
+        # Log edge cases with low confidence (might need review)
+        push(
+            f"⚠️ LOW CONFIDENCE: {category}\n"
+            f"Message: {user_message[:100]}\n"
+            f"Reason: {reasoning}"
+        )
+
+
 record_user_details_json = {
     "name": "record_user_details",
     "description": "Use this tool to record that a user is interested in being in touch and provided an email address",
