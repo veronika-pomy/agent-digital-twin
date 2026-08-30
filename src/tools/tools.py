@@ -14,14 +14,21 @@ pushover_url = "https://api.pushover.net/1/messages.json"
 
 
 def push(text):
-    requests.post(
-        pushover_url,
-        data={
-            "token": pushover_token,
-            "user": pushover_user,
-            "message": text,
-        },
-    )
+    """Send notification via Pushover. Fails gracefully if Pushover is unavailable."""
+    try:
+        requests.post(
+            pushover_url,
+            data={
+                "token": pushover_token,
+                "user": pushover_user,
+                "message": text,
+            },
+            timeout=5,  # Don't hang forever
+        )
+        print(f"[PUSHOVER] Notification sent: {text[:50]}...")
+    except Exception as e:
+        # Log error 
+        print(f"[PUSHOVER] Failed to send notification: {type(e).__name__}: {e}")
 
 
 def record_user_details(email, name="Name not provided", notes="not provided"):

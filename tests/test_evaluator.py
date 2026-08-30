@@ -7,8 +7,18 @@ Prerequisites:
 
 2. Ensure your .env file has OPENAI_API_KEY set
 
-Run with: python test_evaluator.py
+Run with:
+  python -m tests.test_evaluator
+  OR
+  python tests/test_evaluator.py (from project root)
 """
+
+import sys
+from pathlib import Path
+
+# Add project root to path so imports work
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 
 from src.agent.evaluator import evaluate_message, should_process_normally
 
