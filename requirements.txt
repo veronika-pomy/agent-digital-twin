@@ -1,5 +1,12 @@
+# Core dependencies
 requests
 gradio
 pypdf
 openai
 python-dotenv
+pydantic
+
+# Testing dependencies
+pytest
+pytest-mock
+pytest-cov

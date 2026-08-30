@@ -21,6 +21,12 @@ Build a production-ready digital twin agent that gracefully handles career-relat
 - [x] Extend Pushover logging - Track evaluation metrics (blocked questions, edge cases)
 - [x] Add evaluation tests - Verify evaluator works on sample inputs
 
+**Testing (Phase 1):**
+- [x] Create `test_evaluator.py` - Standalone evaluation script with 13 test cases
+- [x] Create `conftest.py` - Pytest fixtures for test data
+- [x] Create `pytest.ini` - Pytest configuration with markers
+- [x] Add example unit tests - `test_handlers_unit.py` with 2 basic tests
+
 **Success Criteria:**
 - Off-topic questions blocked before expensive LLM call
 - Graceful refusal messages for off-topic requests
@@ -44,6 +50,14 @@ Build a production-ready digital twin agent that gracefully handles career-relat
 - [ ] Implement category-specific handlers
 - [ ] Add routing decision logging
 - [ ] Create classification confidence scoring
+
+**Testing (Phase 2):**
+- [ ] Add unit tests with pytest markers (`@pytest.mark.unit`)
+- [ ] Mock LLM calls in unit tests (using `pytest-mock`)
+- [ ] Create integration tests for routing (`@pytest.mark.integration`)
+- [ ] Add tests for confidence scoring logic
+- [ ] Expand evaluation script with new categories
+- [ ] Build golden dataset (20-30 sample questions with expected outcomes)
 
 **Categories to Handle:**
 - Career question → Full digital twin response
@@ -94,6 +108,14 @@ Build a production-ready digital twin agent that gracefully handles career-relat
 - Error handling for network issues
 - Graceful handling of media/files users might send
 
+**Testing (Phase 3):**
+- [ ] Add integration tests for Telegram bot (`test_telegram_integration.py`)
+- [ ] Test message handling (text, commands, formatting)
+- [ ] Test session management across conversations
+- [ ] Test error handling and rate limiting
+- [ ] Manual testing with real Telegram users (gather feedback)
+- [ ] Track metrics: response time, error rate, user satisfaction
+
 ---
 
 ## Phase 4: Memory & Context Management
@@ -119,6 +141,14 @@ Build a production-ready digital twin agent that gracefully handles career-relat
 - Long-term memory (across sessions)
 - Semantic memory (learned patterns)
 - Episodic memory (specific conversations)
+
+**Testing (Phase 4):**
+- [ ] Add unit tests for memory storage/retrieval logic
+- [ ] Test session tracking across multiple conversations
+- [ ] Test memory persistence and cleanup
+- [ ] Create evaluation tests for personalization quality
+- [ ] Test edge case learning (does it improve over time?)
+- [ ] Benchmark memory lookup performance
 
 ---
 
@@ -150,6 +180,15 @@ User Input → Coordinator Agent
               ├─> Clarification Agent (handle ambiguous questions)
               └─> Tools Agent (email recording, question logging)
 ```
+
+**Testing (Phase 5):**
+- [ ] Add unit tests for coordinator logic
+- [ ] Test agent communication protocol
+- [ ] Test agent selection strategy (right agent for the job)
+- [ ] Integration tests for full multi-agent flow
+- [ ] Performance tests (latency, parallel execution)
+- [ ] Test fallback behavior when agents fail
+- [ ] Monitor and log agent performance metrics
 
 ---
 
@@ -184,6 +223,15 @@ User Input → Coordinator Agent
 - Off-brand tone
 - Factual accuracy
 
+**Testing (Phase 6):**
+- [ ] Add adversarial tests (jailbreak attempts, prompt injection)
+- [ ] Test PII detection accuracy (unit tests with sample data)
+- [ ] Test output quality validation
+- [ ] Test fact-checking against LinkedIn profile
+- [ ] Create security test suite (`test_security.py`)
+- [ ] Build attack dataset for guardrail testing
+- [ ] Measure false positive/negative rates for safety checks
+
 ---
 
 ## Phase 7: Production Scalability
@@ -214,6 +262,16 @@ User Input → Coordinator Agent
 - User satisfaction
 - Scalability (concurrent users)
 
+**Testing (Phase 7):**
+- [ ] Performance benchmarking suite
+- [ ] Load testing (concurrent users, stress tests)
+- [ ] Cache hit/miss rate testing
+- [ ] A/B test framework validation
+- [ ] RAG accuracy evaluation (retrieval quality)
+- [ ] Regression testing suite (prevent quality degradation)
+- [ ] End-to-end production simulation tests
+- [ ] Set up CI/CD pipeline with automated testing
+
 ---
 
 ## Future Considerations
@@ -229,18 +287,40 @@ User Input → Coordinator Agent
 ---
 
 ## Success Metrics (Across All Phases)
-- **Accuracy:** % of questions correctly classified
-- **Precision:** % of blocked questions that were truly off-topic
-- **Recall:** % of off-topic questions successfully blocked
-- **Latency:** Average response time
-- **Cost:** Cost per interaction
-- **User Satisfaction:** Feedback ratings
+
+### Quality Metrics (Tested Throughout)
+- **Accuracy:** % of questions correctly classified (measured in evaluation tests)
+- **Precision:** % of blocked questions that were truly off-topic (minimize false positives)
+- **Recall:** % of off-topic questions successfully blocked (minimize false negatives)
+- **Confidence Distribution:** Track low/medium/high confidence classifications
+
+### Performance Metrics (Tracked & Tested)
+- **Latency:** Average response time (benchmarked in tests)
+- **Cost:** Cost per interaction (tracked per phase)
+- **Test Coverage:** % of code covered by tests
+- **Test Pass Rate:** % of tests passing on each commit
+
+### User Experience Metrics (Measured in Production)
+- **User Satisfaction:** Feedback ratings from real users
 - **Engagement:** Conversation length, return rate
+- **Error Rate:** % of conversations with errors
+- **Edge Cases Discovered:** Low-confidence or misclassified messages
 
 ---
 
 ## Notes
+
+### Development Philosophy
 - This is a Work In Progress - phases will evolve based on learnings
 - Each phase builds on the previous, but can be adjusted as needed
 - Focus on production-ready patterns that showcase agentic architecture
 - Balance sophistication with maintainability
+
+### Testing Philosophy
+- **Test as you build:** Testing tasks are integrated into each phase
+- Tests are written alongside features, not after
+- Each phase adds tests for its own functionality
+- Unit tests for logic, integration tests for flows, evaluation tests for quality
+- Goal: Keep testing and app development in sync
+- See [TESTING.md](TESTING.md) for detailed testing strategy
+- See [TESTS_STATUS.md](TESTS_STATUS.md) for current test implementation status
