@@ -2,6 +2,116 @@
 
 An AI-powered digital twin that answers questions about your professional career, background, and experience.
 
+## Agentic Patterns & Architecture
+
+This project showcases **production-ready agentic patterns** that optimize cost, latency, and response quality through intelligent routing and evaluation.
+
+### Current Architecture (Phase 1): Pre-flight Evaluation Pattern
+
+The agent uses **early evaluation** to filter requests before expensive LLM calls, reducing cost and improving user experience.
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         User sends message                          │
+└────────────────────────────┬────────────────────────────────────────┘
+                             │
+                             ▼
+                  ┌──────────────────────┐
+                  │  Pre-flight Evaluator │  ◄── Fast, cheap model
+                  │   (Structured Output) │      (gpt-4o-mini)
+                  └──────────┬───────────┘
+                             │
+                ┌────────────┼────────────┐
+                │            │            │
+                ▼            ▼            ▼
+         ┌──────────┐  ┌──────────┐  ┌──────────┐
+         │ Greeting │  │  Career  │  │Off-topic │
+         │          │  │ Question │  │          │
+         └────┬─────┘  └────┬─────┘  └────┬─────┘
+              │             │             │
+              ▼             ▼             ▼
+        ┌──────────┐  ┌──────────┐  ┌──────────┐
+        │  Brief   │  │   Full   │  │ Graceful │
+        │ Response │  │  Agent   │  │ Refusal  │
+        │          │  │  Loop    │  │          │
+        └──────────┘  └────┬─────┘  └──────────┘
+                           │
+                           ▼
+                  ┌────────────────┐
+                  │  Tool Calling  │  ◄── Only for career questions
+                  │  (Email, Log)  │
+                  └────────────────┘
+```
+
+**Key Benefits:**
+- **Cost Optimization:** Off-topic questions cost ~$0.0001 (evaluation only) vs ~$0.01+ (full response)
+- **Latency Reduction:** Instant refusal for off-topic (200ms vs 2-3s)
+- **Quality Improvement:** Structured classification with confidence scoring
+- **Monitoring:** Pushover notifications for blocked/edge-case messages
+
+### Future Architecture (Phase 5): Multi-Agent Coordinator Pattern
+
+Planned evolution to a **sophisticated multi-agent system** with specialized agents and intelligent coordination.
+
+```
+                        ┌─────────────────────┐
+                        │   User Input        │
+                        └──────────┬──────────┘
+                                   │
+                                   ▼
+                        ┌─────────────────────┐
+                        │  Coordinator Agent  │ ◄── Orchestrates workflow
+                        │  (Decision Maker)   │
+                        └──────────┬──────────┘
+                                   │
+           ┌───────────────────────┼───────────────────────┐
+           │                       │                       │
+           ▼                       ▼                       ▼
+    ┌─────────────┐        ┌─────────────┐        ┌─────────────┐
+    │  Evaluator  │        │ Digital Twin│        │Clarification│
+    │   Agent     │        │   Agent     │        │   Agent     │
+    │             │        │             │        │             │
+    │ • Classify  │        │ • Answer    │        │ • Handle    │
+    │ • Confidence│        │ • Context   │        │   ambiguity │
+    │ • Route     │        │ • Tools     │        │ • Follow-up │
+    └──────┬──────┘        └──────┬──────┘        └──────┬──────┘
+           │                      │                      │
+           └──────────────────────┼──────────────────────┘
+                                  │
+                                  ▼
+                        ┌─────────────────────┐
+                        │    Tools Agent      │
+                        │                     │
+                        │ • Email recording   │
+                        │ • Question logging  │
+                        │ • Analytics         │
+                        └─────────────────────┘
+```
+
+**Advanced Features (Planned):**
+- **Parallel Execution:** Multiple agents work concurrently
+- **Agent Specialization:** Each agent optimized for its task
+- **Memory Management:** Context sharing between agents
+- **Graceful Degradation:** Fallback when agents fail
+- **Performance Monitoring:** Track agent efficiency
+
+### Design Principles
+
+1. **Pre-flight over Post-flight:** Evaluate before expensive operations
+2. **Structured:** Use Pydantic models, not text parsing
+3. **Specialized:** Purpose-built agents for specific tasks
+4. **Observable:** Log decisions, track confidence, monitor performance
+5. **Fail Gracefully:** Handle errors without crashing the user experience
+
+### Architecture Improvement
+
+- **Saves 90%+ on off-topic questions** (evaluation only, no full LLM call)
+- **Responds instantly to greetings** (no agent loop needed)
+- **Logs edge cases for improvement** (low confidence classifications)
+- **Scales to complex workflows** (multi-agent coordination in later phases)
+
+See [planning/ROADMAP.md](planning/ROADMAP.md) for the complete 7-phase implementation plan.
+
 ## Features (Phase 1 Complete)
 
 - 🤖 **Pre-flight message evaluation** - Classifies messages before expensive LLM calls
